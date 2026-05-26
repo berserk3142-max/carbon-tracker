@@ -1,0 +1,11 @@
+employee_id,employee_name,travel_type,origin,destination,date,cost,currency,purpose
+EMP-001,Aman Kumar,flight,DEL,BLR,2026-05-10,12000,INR,Client Meeting
+EMP-002,Sarah Chen,flight,BOM,DEL,2026-05-11,15000,INR,Conference
+EMP-001,Aman Kumar,hotel,,Mumbai,2026-05-11,8500,INR,Client Meeting
+EMP-003,Hans Mueller,train,Berlin,Munich,2026-05-12,150,EUR,Site Visit
+EMP-002,Sarah Chen,taxi,,Delhi,2026-05-10,1200,INR,Airport Transfer
+EMP-004,Priya Sharma,flight,DEL,LHR,2026-05-14,85000,INR,Annual Review
+EMP-004,Priya Sharma,hotel,,London,2026-05-14,22000,INR,Annual Review
+EMP-005,John Davis,flight,SFO,SIN,2026-05-16,120000,INR,Partnership Summit
+EMP-003,Hans Mueller,flight,FRA,BOM,2026-05-18,65000,INR,Factory Audit
+EMP-001,Aman Kumar,taxi,,Bengaluru,2026-05-10,800,INR,Client Meeting

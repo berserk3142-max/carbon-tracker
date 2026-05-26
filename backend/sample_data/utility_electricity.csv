@@ -1,0 +1,9 @@
+meter_id,facility,start_date,end_date,usage_kwh,usage_mwh,cost_usd,tariff_type
+MTR-1102,Berlin Plant,2026-04-15,2026-05-14,15000,,1800,standard
+MTR-2201,Mumbai Plant,2026-04-01,2026-04-30,,45,5400,industrial
+MTR-3301,Singapore Office,2026-04-01,2026-04-30,8500,,1200,commercial
+MTR-1102,Berlin Plant,2026-05-15,2026-06-14,150000,,18000,standard
+MTR-2201,Mumbai Plant,2026-05-01,2026-05-31,32000,,3800,industrial
+MTR-4401,Dubai Warehouse,2026-04-01,2026-04-30,22000,,2900,industrial
+MTR-3301,Singapore Office,2026-05-01,2026-05-31,9200,,1350,commercial
+MTR-1102,Berlin Plant,2026-06-15,2026-07-14,14500,,1750,standard
