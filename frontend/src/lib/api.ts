@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE = '/api';
+const API_BASE = import.meta.env.VITE_API_BASE || '/api';
 
 const api = axios.create({
   baseURL: API_BASE,
@@ -31,7 +31,7 @@ api.interceptors.response.use(
   }
 );
 
-// ─── Auth API ───
+// Auth API
 export const authAPI = {
   login: (data: { username: string; password: string }) =>
     api.post('/auth/login/', data),
@@ -47,7 +47,7 @@ export const authAPI = {
   me: () => api.get('/auth/me/'),
 };
 
-// ─── Ingestion API ───
+// Ingestion API
 export const ingestionAPI = {
   upload: (file: File, sourceType: string) => {
     const formData = new FormData();
@@ -65,7 +65,7 @@ export const ingestionAPI = {
     api.get(`/ingestion/sources/${sourceId}/raw_records/`),
 };
 
-// ─── Activities API ───
+// Activities API
 export const activitiesAPI = {
   list: (params?: Record<string, string>) =>
     api.get('/activities/', { params }),
@@ -87,7 +87,7 @@ export const activitiesAPI = {
     api.get('/activities/stats/'),
 };
 
-// ─── Audits API ───
+// Audits API
 export const auditsAPI = {
   list: (params?: Record<string, string>) =>
     api.get('/audits/', { params }),

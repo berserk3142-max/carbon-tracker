@@ -10,6 +10,7 @@ The project is built around a simple idea: every calculated emission value must 
 - [Technology Stack](#technology-stack)
 - [High-Level Architecture](#high-level-architecture)
 - [Project Structure](#project-structure)
+- [Evaluation Documents](#evaluation-documents)
 - [Application Flow](#application-flow)
 - [Detailed Flow Chart](#detailed-flow-chart)
 - [Data Ingestion Pipeline](#data-ingestion-pipeline)
@@ -20,6 +21,7 @@ The project is built around a simple idea: every calculated emission value must 
 - [Environment and Database](#environment-and-database)
 - [Setup Instructions](#setup-instructions)
 - [Running the Project](#running-the-project)
+- [Deployment](#deployment)
 - [Seed Data](#seed-data)
 - [Main API Endpoints](#main-api-endpoints)
 - [Supported CSV Sources](#supported-csv-sources)
@@ -135,6 +137,17 @@ The backend is split into focused Django apps:
             +-- ActivityDetailPage.tsx
             +-- AuditLogPage.tsx
 ```
+
+## Evaluation Documents
+
+The assignment-specific design documents are included at the repository root:
+
+| Document | Purpose |
+| --- | --- |
+| `MODEL.md` | Data model, tenancy strategy, source tracking, unit normalization, and audit trail rationale. |
+| `DECISIONS.md` | Ambiguities resolved, source subsets chosen, ignored areas, and PM questions. |
+| `TRADEOFFS.md` | Three deliberate omissions and why they were not built. |
+| `SOURCES.md` | Source-format research, sample data rationale, and real-deployment failure modes. |
 
 ## Application Flow
 
@@ -641,6 +654,55 @@ http://localhost:5173
 ```
 
 The frontend uses `/api` as its API base path. In development, `frontend/vite.config.ts` proxies `/api` requests to the Django backend at `http://localhost:8000`.
+
+## Deployment
+
+This repository includes a Render Blueprint:
+
+```text
+render.yaml
+```
+
+It defines two services:
+
+| Service | Purpose |
+| --- | --- |
+| `carbon-tracker-api` | Django REST API served by Gunicorn. |
+| `carbon-tracker` | Vite static frontend. |
+
+The backend service runs:
+
+```text
+pip install -r requirements.txt && python manage.py collectstatic --noinput
+python manage.py migrate && python manage.py seed_data && gunicorn config.wsgi:application
+```
+
+The frontend service runs:
+
+```text
+npm ci && npm run build
+```
+
+Required Render environment variable for the backend:
+
+```text
+DATABASE_URL=postgresql://USER:PASSWORD@HOST/neondb?sslmode=require&channel_binding=require
+```
+
+The frontend uses:
+
+```text
+VITE_API_BASE=https://carbon-tracker-api.onrender.com/api
+```
+
+If Render assigns different service URLs, update:
+
+- backend `DJANGO_ALLOWED_HOSTS`
+- backend `CORS_ALLOWED_ORIGINS`
+- backend `CSRF_TRUSTED_ORIGINS`
+- frontend `VITE_API_BASE`
+
+The local `.env` file is intentionally ignored by Git. Use `backend/.env.example` and `frontend/.env.example` as templates.
 
 ## Seed Data
 

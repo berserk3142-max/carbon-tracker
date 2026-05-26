@@ -11,11 +11,16 @@ from decouple import AutoConfig, Csv
 BASE_DIR = Path(__file__).resolve().parent.parent
 config = AutoConfig(search_path=BASE_DIR)
 
+
+def csv_config(name, default=''):
+    """Read comma-separated env vars and drop blank values."""
+    return [value for value in config(name, default=default, cast=Csv()) if value]
+
 SECRET_KEY = config('DJANGO_SECRET_KEY', default='dev-secret-key-change-in-production-esg-platform-2026')
 
 DEBUG = config('DJANGO_DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = config('DJANGO_ALLOWED_HOSTS', default='*', cast=Csv())
+ALLOWED_HOSTS = csv_config('DJANGO_ALLOWED_HOSTS', default='*')
 
 # Application definition
 INSTALLED_APPS = [
@@ -40,6 +45,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -139,6 +145,11 @@ USE_TZ = True
 # Static files
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STORAGES = {
+    'staticfiles': {
+        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+    },
+}
 
 # Media files (for CSV uploads)
 MEDIA_URL = '/media/'
@@ -172,8 +183,14 @@ SIMPLE_JWT = {
 }
 
 # CORS
-CORS_ALLOW_ALL_ORIGINS = DEBUG
-CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', default='http://localhost:5173', cast=Csv())
+CORS_ALLOW_ALL_ORIGINS = config('CORS_ALLOW_ALL_ORIGINS', default=DEBUG, cast=bool)
+CORS_ALLOWED_ORIGINS = csv_config('CORS_ALLOWED_ORIGINS', default='http://localhost:5173')
+CSRF_TRUSTED_ORIGINS = csv_config('CSRF_TRUSTED_ORIGINS')
+
+# Production proxy/security settings
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
 
 # File upload limits
 FILE_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10MB
