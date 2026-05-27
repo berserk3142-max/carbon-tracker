@@ -1,3 +1,9 @@
+---
+title: Carbon Tracker
+sdk: docker
+app_port: 7860
+---
+
 # CarbonTrack - ESG Carbon Accounting Platform
 
 CarbonTrack is a full-stack ESG carbon accounting application for uploading operational data, normalizing it into auditable activity records, calculating CO2e emissions, and moving records through a review and audit workflow.

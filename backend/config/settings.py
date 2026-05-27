@@ -10,6 +10,7 @@ from decouple import AutoConfig, Csv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 config = AutoConfig(search_path=BASE_DIR)
+FRONTEND_DIST = Path(config('FRONTEND_DIST', default=BASE_DIR / 'frontend_dist'))
 
 
 def csv_config(name, default=''):
