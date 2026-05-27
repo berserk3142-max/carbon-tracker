@@ -1,14 +1,17 @@
 services:
   - type: web
     name: carbon-tracker-api
-    env: python
+    runtime: python
     rootDir: backend
     plan: free
     buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput
-    startCommand: python manage.py migrate && python manage.py seed_data && gunicorn config.wsgi:application
+    preDeployCommand: python manage.py migrate && python manage.py seed_data
+    startCommand: gunicorn config.wsgi:application --bind 0.0.0.0:$PORT
     envVars:
       - key: DATABASE_URL
-        sync: false
+        fromDatabase:
+          name: carbon-tracker-db
+          property: connectionString
       - key: DJANGO_SECRET_KEY
         generateValue: true
       - key: DJANGO_DEBUG
@@ -22,7 +25,7 @@ services:
 
   - type: web
     name: carbon-tracker
-    env: static
+    runtime: static
     rootDir: frontend
     plan: free
     buildCommand: npm ci && npm run build
@@ -34,3 +37,9 @@ services:
     envVars:
       - key: VITE_API_BASE
         value: https://carbon-tracker-api.onrender.com/api
+
+databases:
+  - name: carbon-tracker-db
+    plan: free
+    databaseName: carbon_tracker
+    user: carbon_tracker_user
